@@ -38,6 +38,7 @@
 {block name="frontend_detail_index_tabs_related"}
     {$smarty.block.parent}
     {if $app_id && !$hideFacebook}
+        {if $showFacebookTab}
         <div id="facebook">
             <h2>{s namespace="frontend/SwagFacebook/blocks_detail" name="facebookTabTitle"}{/s}</h2>
             <div class="container">
@@ -45,14 +46,17 @@
                 <fb:comments href="{url sArticle=$sArticle.articleID title=$sArticle.articleName}" migrated="1" xid="{$unique_id}" width="560"></fb:comments>
             </div>
         </div>
+        {/if}
     {/if}
 {/block}
 
 {block name="frontend_detail_tabs_rating"}
     {$smarty.block.parent}
     {if $app_id && !$hideFacebook}
+        {if $showFacebookTab}
         <li>
             <a href="#facebook">{s namespace="frontend/SwagFacebook/blocks_detail" name="facebookTabTitle"}{/s}</a>
         </li>
+        {/if}
     {/if}
 {/block}
