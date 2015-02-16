@@ -85,7 +85,9 @@ class Shopware_Plugins_Frontend_SwagFacebook_Bootstrap extends Shopware_Componen
         $translations = array(
             'en_GB'  => array(
                 'showSwagFacebook' => array('label' => 'Show Facebook'),
-                'app_id_SwagFacebook' => array('label' => 'Facebook App-ID')
+                'app_id_SwagFacebook' => array('label' => 'Facebook App-ID'),
+                'showDetailPageComments' => array('label' => 'Show comments in detail page'),
+                'hideCommentTab' => array('label' => 'Only show facebook comments if available'),
             )
         );
 
@@ -93,6 +95,9 @@ class Shopware_Plugins_Frontend_SwagFacebook_Bootstrap extends Shopware_Componen
 
         $form->setElement('checkbox', 'showSwagFacebook', array('label' => 'Facebook zeigen', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
         $form->setElement('text', 'app_id_SwagFacebook', array('label' => 'Facebook App-ID', 'value' => '', 'scope' => Shopware_Components_Form::SCOPE_SHOP));
+
+        $form->setElement('checkbox', 'showDetailPageComments', array('label' => 'Facebook-Kommentare auf Detailseite anzeigen', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
+        $form->setElement('checkbox', 'hideCommentTab', array('label' => 'Facebook-Kommentare nur anzeigen, falls verfügbar', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
 
         $this->addFormTranslations($translations);
     }
@@ -114,6 +119,20 @@ class Shopware_Plugins_Frontend_SwagFacebook_Bootstrap extends Shopware_Componen
 
         $view->assign('app_id', $config->get('app_id_SwagFacebook'));
 
+        $showDetailPageComments = $config->get('showDetailPageComments');
+        if ($showDetailPageComments) {
+            $showFacebookTab = true;
+            $showFacebookTabConfig = $config->get('hideCommentTab');
+            if ($showFacebookTabConfig) {
+                $pageUrl = $request->getScheme(). '://' . $request->getHttpHost() . $request->getRequestUri();
+                $commentCount = $this->getCommentCount($pageUrl);
+                if ($commentCount == 0) {
+                    $showFacebookTab = false;
+                }
+            }
+            $view->assign('showFacebookTab', $showFacebookTab);
+        }
+
         if (preg_match("/MSIE 6/", $request->getHeader('USER_AGENT'))) {
             $view->assign('hideFacebook', true);
         } else {
@@ -130,5 +149,20 @@ class Shopware_Plugins_Frontend_SwagFacebook_Bootstrap extends Shopware_Componen
         if (Shopware()->Shop()->getTemplate()->getVersion() == 2) {
             $view->extendsTemplate('frontend/SwagFacebook/header.tpl');
         }
+    }
+
+    /**
+     * Get facebook comment count from facebook graph api for current url
+     *
+     * @param string $url
+     * @return integer
+     */
+    private function getCommentCount($url)
+    {
+        $response = file_get_contents('http://graph.facebook.com/?id=' . $url);
+        $data = json_decode($response, true);
+        $commentsCount = $data['comments'] ? $data['comments'] : 0;
+
+        return $commentsCount;
     }
 }
