@@ -159,6 +159,11 @@ class Shopware_Plugins_Frontend_SwagFacebook_Bootstrap extends Shopware_Componen
      */
     private function getCommentCount($url)
     {
+        //remove additional GET parameters
+        if ($pos = strpos($url, '?')) {
+            $url = substr($url, 0, $pos);
+        }
+
         $response = file_get_contents('http://graph.facebook.com/?id=' . $url);
         $data = json_decode($response, true);
         $commentsCount = $data['comments'] ? $data['comments'] : 0;
