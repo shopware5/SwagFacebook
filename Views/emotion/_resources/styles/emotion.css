@@ -1,2 +1,8 @@
 #detail #detailinfo #facebook h2 {font-size: 14px; font-weight: 700; margin: 0 0 15px;}
 #SwagFacebookMarginTopContainer {margin-top:25px}
+#facebook table textarea {
+    z-index: 99999;
+}
+#swagFacebookTabLink {
+    z-index: 333;
+}

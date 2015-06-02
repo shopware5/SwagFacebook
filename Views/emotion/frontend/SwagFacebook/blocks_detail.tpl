@@ -29,33 +29,7 @@
     {$smarty.block.parent}
     {if !$hideFacebook}
         <div id="SwagFacebookMarginTopContainer">
-            {*<script src="//connect.facebook.net/{$Locale}/all.js#xfbml=1"></script>*}
-            {*<fb:like href="{url sArticle=$sArticle.articleID}" send="send" layout="button_count" width="250" show_faces="false"></fb:like>*}
-            <div id="fb-root"></div>
-            <script>
-
-                (function(d, s, id) {
-                    var js, fjs = d.getElementsByTagName(s)[0];
-                    if (d.getElementById(id)) {
-                        return;
-                    }
-                    js = d.createElement(s); js.id = id;
-                    js.src = "//connect.facebook.net/{$Locale}/sdk.js#xfbml=1&version=v2.3&appId={$app_id}";
-                    fjs.parentNode.insertBefore(js, fjs);
-                }(document, 'script', 'facebook-jssdk'));
-
-            </script>
-
-            <div class="fb-like"
-                 data-action="like"
-                 data-colorscheme="{if $swagFacebookColorscheme == 2}dark{else}light{/if}"
-                 data-href="{url sArticle=$sArticle.articleID title=$sArticle.articleName}"
-                 data-layout="standard"
-                 data-width="240"
-                 data-ref="articleID:{$sArticle.articleID}"
-                 data-show-faces="{if $swagFbShowFaces == false}false{else}true{/if}"
-                 data-share="{if $swagFbShowShareButton == false}false{else}true{/if}">
-            </div>
+            <fb:like href="{url sArticle=$sArticle.articleID}" send="send" layout="button_count" width="250" show_faces="{if $swagFbShowFaces == false}false{else}true{/if}"></fb:like>
         </div>
     {/if}
 {/block}
