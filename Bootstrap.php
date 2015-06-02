@@ -114,11 +114,12 @@ class Shopware_Plugins_Frontend_SwagFacebook_Bootstrap extends Shopware_Componen
 
         $form->setElement('text', 'app_id_SwagFacebook', array('label' => 'Facebook App-ID', 'value' => '', 'scope' => Shopware_Components_Form::SCOPE_SHOP));
         $form->setElement('checkbox', 'showSwagFacebook', array('label' => 'Facebook zeigen', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
-        $form->setElement('checkbox', 'swagFacebook_showShareButton', array('label' => 'Teilen Button zeigen', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
-        $form->setElement('checkbox', 'swagFacebook_showFaces', array('label' => 'Bilder "Gesichter" zeigen', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
+        $form->setElement('checkbox', 'swagFacebook_showShareButton', array('label' => 'Teilen Button zeigen (*)', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
+        $form->setElement('checkbox', 'swagFacebook_showFaces', array('label' => 'Bilder "Gesichter" zeigen (*)', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
         $form->setElement('checkbox', 'showDetailPageComments', array('label' => 'Facebook-Kommentare auf Detailseite anzeigen', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
         $form->setElement('checkbox', 'hideCommentTab', array('label' => 'Facebook-Kommentare nur anzeigen, falls verfügbar', 'value' => 0, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
-        $form->setElement('select', 'swagFacebook_colorscheme', array('label' => 'Farbschema', 'store' => array(array(1,'light'), array(2, 'dark')), 'scope' => Shopware_Components_Form::SCOPE_SHOP));
+        $form->setElement('select', 'swagFacebook_colorscheme', array('label' => 'Farbschema (*)', 'store' => array(array(1,'light'), array(2, 'dark')), 'scope' => Shopware_Components_Form::SCOPE_SHOP));
+
 
         $this->addFormTranslations($translations);
     }

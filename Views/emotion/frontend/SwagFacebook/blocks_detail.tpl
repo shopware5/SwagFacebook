@@ -29,30 +29,7 @@
     {$smarty.block.parent}
     {if !$hideFacebook}
         <div id="SwagFacebookMarginTopContainer">
-            <script>
-
-                (function(d, s, id) {
-                    var js, fjs = d.getElementsByTagName(s)[0];
-                    if (d.getElementById(id)) {
-                        return;
-                    }
-                    js = d.createElement(s); js.id = id;
-                    js.src = "//connect.facebook.net/{$Locale}/sdk.js#xfbml=1&version=v2.3&appId={$app_id}";
-                    fjs.parentNode.insertBefore(js, fjs);
-                }(document, 'script', 'facebook-jssdk'));
-
-            </script>
-
-            <div class="fb-like"
-                 data-action="like"
-                 data-colorscheme="{if $swagFacebookColorscheme == 2}dark{else}light{/if}"
-                 data-href="{url sArticle=$sArticle.articleID title=$sArticle.articleName}"
-                 data-layout="standard"
-                 data-ref="articleID:{$sArticle.articleID}"
-                 data-show-faces="{if $swagFbShowFaces == false}false{else}true{/if}"
-                 data-share="{if $swagFbShowShareButton == false}false{else}true{/if}">
-            </div>
-
+            <fb:like href="{url sArticle=$sArticle.articleID}" send="send" layout="button_count" width="250" show_faces="{if $swagFbShowFaces == false}false{else}true{/if}"></fb:like>
         </div>
     {/if}
 {/block}
@@ -61,18 +38,13 @@
     {$smarty.block.parent}
     {if $app_id && !$hideFacebook}
         {if $showFacebookTab}
-        <div id="facebook">
-            <h2>{s namespace="frontend/SwagFacebook/blocks_detail" name="facebookTabTitle"}{/s}</h2>
-            <div class="container">
-                <div class="fb-comments"
-                     data-href="{url sArticle=$sArticle.articleID title=$sArticle.articleName}"
-                     data-numposts="5"
-                     data-colorscheme="{if $swagFacebookColorscheme == 2}dark{else}light{/if}"
-                     data-width="100%"
-                     data-order-by="time">
+            <div id="facebook">
+                <h2>{s namespace="frontend/SwagFacebook/blocks_detail" name="facebookTabTitle"}{/s}</h2>
+                <div class="container">
+                    <div id="fb-root"></div><script src="//connect.facebook.net/{$Locale}/all.js#appId={$app_id}&amp;xfbml=1"></script>
+                    <fb:comments href="{url sArticle=$sArticle.articleID title=$sArticle.articleName}" migrated="1" xid="{$unique_id}" width="560"></fb:comments>
                 </div>
             </div>
-        </div>
         {/if}
     {/if}
 {/block}
@@ -81,9 +53,9 @@
     {$smarty.block.parent}
     {if $app_id && !$hideFacebook}
         {if $showFacebookTab}
-        <li>
-            <a href="#facebook">{s namespace="frontend/SwagFacebook/blocks_detail" name="facebookTabTitle"}{/s}</a>
-        </li>
+            <li>
+                <a href="#facebook">{s namespace="frontend/SwagFacebook/blocks_detail" name="facebookTabTitle"}{/s}</a>
+            </li>
         {/if}
     {/if}
 {/block}
