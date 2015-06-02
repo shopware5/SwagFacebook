@@ -30,6 +30,7 @@
                  data-show-faces="{if $swagFbShowFaces == false}false{else}true{/if}"
                  data-share="{if $swagFbShowShareButton == false}false{else}true{/if}">
             </div>
+
         </div>
     {/if}
 

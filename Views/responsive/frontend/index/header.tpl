@@ -7,10 +7,15 @@
         <meta property="fb:app_id"      content="{$app_id}" />
     {/if}
 
-    {if $sArticle.image.src.3}
-        <meta property="og:image" content="{$sArticle.image.src.3}" />
+    {* Add main image *}
+    {if $sArticle.image}
+        <meta property="og:image" content="{$sArticle.image.source}" />
     {else}
-        <meta property="og:image" content="{link file='frontend/_resources/images/no_picture.jpg'}" />
+        {if $sArticle.supplierImg}
+            <meta property="og:image" content="{$sArticle.supplierImg}" />
+        {else}
+            <meta property="og:image" content="{link file='frontend/_resources/images/no_picture.jpg'}" />
+        {/if}
     {/if}
 
     <meta property="og:type"            content="product" />
