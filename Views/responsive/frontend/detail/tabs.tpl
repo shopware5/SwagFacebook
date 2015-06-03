@@ -6,8 +6,8 @@
 
     {*FacebookTab*}
     {block name="swagFacebookTab"}
-        {if $app_id && !$hideFacebook}
-            {if $showFacebookTab}
+        {if $swagFacebook_app_id && !$swagFacebook_hideFacebook}
+            {if $swagFacebook_showFacebookTab}
                 <a class="tab--link" href="#facebook">{s namespace="frontend/SwagFacebook/blocks_detail" name="facebookTabTitle"}{/s}</a>
             {/if}
         {/if}
@@ -19,8 +19,8 @@
 
     {$smarty.block.parent}
 
-        {if $app_id && !$hideFacebook}
-            {if $showFacebookTab}
+        {if $swagFacebook_app_id && !$swagFacebook_hideFacebook}
+            {if $swagFacebook_showFacebookTab}
             <div class="tab--container">
                 <div class="tab--header">
                     <h2>{s namespace="frontend/SwagFacebook/blocks_detail" name="facebookTabTitle"}{/s}</h2>
@@ -33,7 +33,7 @@
                     <div class="fb-comments"
                          data-href="{url sArticle=$sArticle.articleID title=$sArticle.articleName}"
                          data-numposts="5"
-                         data-colorscheme="{if $swagFacebookColorscheme == 2}dark{else}light{/if}"
+                         data-colorscheme="{if $swagFacebook_colorScheme == 2}dark{else}light{/if}"
                          data-width="100%"
                          data-order-by="time">
                     </div>

@@ -75,12 +75,13 @@ class Frontend implements SubscriberInterface
     private function assignConfigDataToView(Enlight_View_Default $view, Enlight_Config $config, Enlight_Controller_Request_Request $request)
     {
         $article = $view->getAssign('sArticle');
-        $view->assign('unique_id', Shopware()->Shop()->getId() . '_' . $article['articleID']);
-        $view->assign('app_id', $config->get('app_id_SwagFacebook'));
-        $view->assign('swagFbShowShareButton', boolval($config->get('swagFacebook_showShareButton')));
-        $view->assign('swagFbShowFaces', boolval($config->get('swagFacebook_showFaces')));
-        $view->assign('showFacebookTab', $this->tabHandling($config, $request));
-        $view->assign('swagFacebookColorscheme', $config->get('swagFacebook_colorscheme'));
+        $view->assign('swagFacebook_unique_id', Shopware()->Shop()->getId() . '_' . $article['articleID']);
+        $view->assign('swagFacebook_app_id', $config->get('app_id_SwagFacebook'));
+        $view->assign('swagFacebook_showShareButton', boolval($config->get('swagFacebook_showShareButton')));
+        $view->assign('swagFacebook_showFaces', boolval($config->get('swagFacebook_showFaces')));
+        $view->assign('swagFacebook_showFacebookTab', $this->tabHandling($config, $request));
+        // TODO: if the setting "swagFacebookColorscheme" has a effect in the Facebook application, activate the settings in the Bootstrap for the Customer...
+        $view->assign('swagFacebook_colorScheme', ($config->get('swagFacebook_colorscheme') || 1));
         $this->IE6Fix($view, $request->getHeader('USER_AGENT'));
     }
 
@@ -157,9 +158,9 @@ class Frontend implements SubscriberInterface
     private function IE6Fix(Enlight_View_Default $view, $userAgent)
     {
         if (preg_match("/MSIE 6/", $userAgent)) {
-            $view->assign('hideFacebook', true);
+            $view->assign('swagFacebook_hideFacebook', true);
         } else {
-            $view->assign('hideFacebook', false);
+            $view->assign('swagFacebook_hideFacebook', false);
         }
     }
 }

@@ -103,10 +103,10 @@ class Shopware_Plugins_Frontend_SwagFacebook_Bootstrap extends Shopware_Componen
                 'showSwagFacebook' => array('label' => 'Show Facebook'),
                 'app_id_SwagFacebook' => array('label' => 'Facebook App-ID'),
                 'showDetailPageComments' => array('label' => 'Show comments in detail page'),
-                'hideCommentTab' => array('label' => 'Only show facebook comments if available'),
-                'swagFacebook_showShareButton' => array('label' => 'Show Like Button'),
-                'swagFacebook_showFaces' => array('label' => 'Show Faces'),
-                'swagFacebook_colorscheme' => array('label' => 'color scheme')
+                'swagFacebook_showShareButton' => array('label' => 'Show share Button (*)'),
+                'swagFacebook_showFaces' => array('label' => 'Show Faces (*)'),
+                // TODO: This is the translation for the Facebook color-scheme settings below.
+//                'swagFacebook_colorscheme' => array('label' => 'color scheme')
             )
         );
 
@@ -117,8 +117,8 @@ class Shopware_Plugins_Frontend_SwagFacebook_Bootstrap extends Shopware_Componen
         $form->setElement('checkbox', 'swagFacebook_showShareButton', array('label' => 'Teilen Button zeigen (*)', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
         $form->setElement('checkbox', 'swagFacebook_showFaces', array('label' => 'Bilder "Gesichter" zeigen (*)', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
         $form->setElement('checkbox', 'showDetailPageComments', array('label' => 'Facebook-Kommentare auf Detailseite anzeigen', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
-        $form->setElement('checkbox', 'hideCommentTab', array('label' => 'Facebook-Kommentare nur anzeigen, falls verfügbar', 'value' => 0, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
-        $form->setElement('select', 'swagFacebook_colorscheme', array('label' => 'Farbschema (*)', 'store' => array(array(1,'light'), array(2, 'dark')), 'scope' => Shopware_Components_Form::SCOPE_SHOP));
+        // TODO: Currently it seems like the setting has no effect. Check later if u can change the Facebook color-scheme
+//        $form->setElement('select', 'swagFacebook_colorscheme', array('label' => 'Farbschema (*)', 'store' => array(array(1,'light'), array(2, 'dark')), 'scope' => Shopware_Components_Form::SCOPE_SHOP));
 
 
         $this->addFormTranslations($translations);
