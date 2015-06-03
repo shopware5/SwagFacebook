@@ -39,12 +39,14 @@ class Shopware_Plugins_Frontend_SwagFacebook_Bootstrap extends Shopware_Componen
     }
 
     /**
+     * Reads the Version of the Plugin from the plugin.json and returns it
+     *
      * @return string
      * @throws Exception
      */
     public function getVersion()
     {
-        $info = json_decode(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'plugin.json'), true);
+        $info = json_decode(file_get_contents(__DIR__ . '/plugin.json'), true);
 
         if ($info) {
             return $info['currentVersion'];
@@ -71,10 +73,24 @@ class Shopware_Plugins_Frontend_SwagFacebook_Bootstrap extends Shopware_Componen
      */
     private function createEvents()
     {
-        $this->subscribeEvent(
-            'Enlight_Controller_Action_PostDispatch_Frontend_Detail',
-            'onPostDispatchDetail'
+        $this->subscribeEvent('Enlight_Controller_Front_DispatchLoopStartup', 'onStartDispatch');
+    }
+
+    /**
+     * Register SubscriberClasses
+     */
+    public function onStartDispatch()
+    {
+        $this->registerPluginNamespace();
+
+        $subscribers = array(
+            new \Shopware\SwagFacebook\Subscriber\Frontend($this),
+            new \Shopware\SwagFacebook\Subscriber\Less()
         );
+
+        foreach ($subscribers as $subscriber) {
+            $this->Application()->Events()->addSubscriber($subscriber);
+        }
     }
 
     /**
@@ -87,87 +103,45 @@ class Shopware_Plugins_Frontend_SwagFacebook_Bootstrap extends Shopware_Componen
                 'showSwagFacebook' => array('label' => 'Show Facebook'),
                 'app_id_SwagFacebook' => array('label' => 'Facebook App-ID'),
                 'showDetailPageComments' => array('label' => 'Show comments in detail page'),
-                'hideCommentTab' => array('label' => 'Only show facebook comments if available'),
+                'swagFacebook_showShareButton' => array('label' => 'Show share Button (*)'),
+                'swagFacebook_showFaces' => array('label' => 'Show Faces (*)'),
+                // TODO: This is the translation for the Facebook color-scheme settings below.
+//                'swagFacebook_colorscheme' => array('label' => 'color scheme')
             )
         );
 
         $form = $this->Form();
 
-        $form->setElement('checkbox', 'showSwagFacebook', array('label' => 'Facebook zeigen', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
         $form->setElement('text', 'app_id_SwagFacebook', array('label' => 'Facebook App-ID', 'value' => '', 'scope' => Shopware_Components_Form::SCOPE_SHOP));
-
+        $form->setElement('checkbox', 'showSwagFacebook', array('label' => 'Facebook zeigen', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
+        $form->setElement('checkbox', 'swagFacebook_showShareButton', array('label' => 'Teilen Button zeigen (*)', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
+        $form->setElement('checkbox', 'swagFacebook_showFaces', array('label' => 'Bilder "Gesichter" zeigen (*)', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
         $form->setElement('checkbox', 'showDetailPageComments', array('label' => 'Facebook-Kommentare auf Detailseite anzeigen', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
-        $form->setElement('checkbox', 'hideCommentTab', array('label' => 'Facebook-Kommentare nur anzeigen, falls verfügbar', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
+        // TODO: Currently it seems like the setting has no effect. Check later if u can change the Facebook color-scheme
+//        $form->setElement('select', 'swagFacebook_colorscheme', array('label' => 'Farbschema (*)', 'store' => array(array(1,'light'), array(2, 'dark')), 'scope' => Shopware_Components_Form::SCOPE_SHOP));
+
 
         $this->addFormTranslations($translations);
     }
 
     /**
-     * Event listener method
+     * Check if the environment is Shopware 5
      *
-     * @param Enlight_Controller_ActionEventArgs $args
+     * @return mixed
      */
-    public function onPostDispatchDetail(Enlight_Controller_ActionEventArgs $args)
+    public function isShopwareFive()
     {
-        $view = $args->getSubject()->View();
-        $request = $args->getSubject()->Request();
-        $config = $this->Config();
-
-        if (!$config->get('showSwagFacebook')) {
-            return;
-        }
-
-        $view->assign('app_id', $config->get('app_id_SwagFacebook'));
-
-        $showDetailPageComments = $config->get('showDetailPageComments');
-        if ($showDetailPageComments) {
-            $showFacebookTab = true;
-            $showFacebookTabConfig = $config->get('hideCommentTab');
-            if ($showFacebookTabConfig) {
-                $pageUrl = $request->getScheme(). '://' . $request->getHttpHost() . $request->getRequestUri();
-                $commentCount = $this->getCommentCount($pageUrl);
-                if ($commentCount == 0) {
-                    $showFacebookTab = false;
-                }
-            }
-            $view->assign('showFacebookTab', $showFacebookTab);
-        }
-
-        if (preg_match("/MSIE 6/", $request->getHeader('USER_AGENT'))) {
-            $view->assign('hideFacebook', true);
-        } else {
-            $view->assign('hideFacebook', false);
-        }
-
-        $article = $view->getAssign('sArticle');
-        $view->assign('unique_id', Shopware()->Shop()->getId() . '_' . $article['articleID']);
-
-        $view->addTemplateDir(__DIR__.'/Views/');
-        Shopware()->Snippets()->addConfigDir($this->Path() . 'Snippets/');
-        $view->extendsTemplate('frontend/SwagFacebook/blocks_detail.tpl');
-
-        if (Shopware()->Shop()->getTemplate()->getVersion() == 2) {
-            $view->extendsTemplate('frontend/SwagFacebook/header.tpl');
-        }
+        return version_compare(Shopware()->Config()->get('Version'), '5.0.0', '>=');
     }
 
     /**
-     * Get facebook comment count from facebook graph api for current url
-     *
-     * @param string $url
-     * @return integer
+     * Registers the plugin namespace to the application loader.
      */
-    private function getCommentCount($url)
+    public function registerPluginNamespace()
     {
-        //remove additional GET parameters
-        if ($pos = strpos($url, '?')) {
-            $url = substr($url, 0, $pos);
-        }
-
-        $response = file_get_contents('http://graph.facebook.com/?id=' . $url);
-        $data = json_decode($response, true);
-        $commentsCount = $data['comments'] ? $data['comments'] : 0;
-
-        return $commentsCount;
+        $this->Application()->Loader()->registerNamespace(
+            'Shopware\SwagFacebook',
+            $this->Path()
+        );
     }
 }
