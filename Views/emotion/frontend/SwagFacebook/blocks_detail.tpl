@@ -3,40 +3,31 @@
     {$smarty.block.parent}
 
     {if $swagFacebook_app_id}
-        <meta property="fb:app_id" content="{$swagFacebook_app_id}"/>
-
-        {* Article name *}
-        <meta property="og:title" content="{$sArticle.articleName|escape} | {$sShopname}" />
-
-        {* Article is a product *}
-        <meta property="og:type" content="product" />
-
-        {* Product URL, same as the canonical URL *}
-        <meta property="og:url" content="{url sArticle=$sArticle.articleID title=$sArticle.articleName}" />
-
-        {* Description *}
-        <meta property="og:description" content="{$sArticle.description_long|strip_tags|truncate:200}" />
-
-        {* Add main image *}
-        {if $sArticle.image.src.3}
-            <meta property="og:image" content="{$sArticle.image.src.3}" />
-        {else}
-            <meta property="og:image" content="{link file='frontend/_resources/images/no_picture.jpg'}" />
-        {/if}
+        <meta property="fb:app_id"          content="{$swagFacebook_app_id}" />
+        <meta property="og:image"           content="{$swagFacebook_thumbnail}" />
+        <meta property="og:type"            content="product" />
+        <meta property="og:url"             content="{url sArticle=$sArticle.articleID title=$sArticle.articleName}" />
+        <meta property="og:title"           content="{$sArticle.articleName|escape} | {$sShopname}" />
+        <meta property="og:description"     content="{$sArticle.description_long|strip_tags|truncate:200}" />
     {/if}
 {/block}
 
 {block name="frontend_detail_index_actions"}
+
     {$smarty.block.parent}
+
     {if $swagFacebook_app_id && !$swagFacebook_hideFacebook}
         <div id="SwagFacebookMarginTopContainer">
             <fb:like href="{url sArticle=$sArticle.articleID}" send="send" layout="button_count" width="250" show_faces="{if $swagFacebook_showFaces == false}false{else}true{/if}"></fb:like>
         </div>
     {/if}
+
 {/block}
 
 {block name="frontend_detail_index_tabs_related"}
+
     {$smarty.block.parent}
+
     {if $swagFacebook_app_id && !$swagFacebook_hideFacebook}
         {if $swagFacebook_showFacebookTab}
             <div id="facebook">
@@ -48,6 +39,7 @@
             </div>
         {/if}
     {/if}
+
 {/block}
 
 {block name="frontend_detail_tabs_rating"}

@@ -7,6 +7,7 @@ use Enlight_Config;
 use Enlight_Controller_ActionEventArgs;
 use Enlight_Controller_Request_Request;
 use Enlight_View_Default;
+use Shopware\SwagFacebook\Components\ArticleImageSourceGenerator;
 use Shopware_Plugins_Frontend_SwagFacebook_Bootstrap;
 
 class Frontend implements SubscriberInterface
@@ -61,7 +62,7 @@ class Frontend implements SubscriberInterface
      */
     private function extendsTemplateForShopwareFour(Enlight_View_Default $view)
     {
-        if (Shopware()->Shop()->getTemplate()->getVersion() == 2) {
+        if (!$this->bootstrap->isTemplateResponsive()) {
             $view->extendsTemplate('frontend/SwagFacebook/blocks_detail.tpl');
             $view->extendsTemplate('frontend/SwagFacebook/header.tpl');
         }
@@ -75,12 +76,13 @@ class Frontend implements SubscriberInterface
     private function assignConfigDataToView(Enlight_View_Default $view, Enlight_Config $config, Enlight_Controller_Request_Request $request)
     {
         $article = $view->getAssign('sArticle');
+        $view->assign('swagFacebook_thumbnail', $this->getArticleImageSourceGenerator($request, $article)->getImageSource());
         $view->assign('swagFacebook_unique_id', Shopware()->Shop()->getId() . '_' . $article['articleID']);
         $view->assign('swagFacebook_app_id', $config->get('app_id_SwagFacebook'));
         $view->assign('swagFacebook_showShareButton', boolval($config->get('swagFacebook_showShareButton')));
         $view->assign('swagFacebook_showFaces', boolval($config->get('swagFacebook_showFaces')));
         $view->assign('swagFacebook_showFacebookTab', $this->tabHandling($config, $request));
-        // TODO: if the setting "swagFacebookColorscheme" has a effect in the Facebook application, activate the settings in the Bootstrap for the Customer...
+        // TODO: if the setting "swagFacebookColorscheme" has a effect in the Facebook application, activate the settings in the Bootstrap for the Customer... See function "createForm()"
         $view->assign('swagFacebook_colorScheme', ($config->get('swagFacebook_colorscheme') || 1));
         $this->IE6Fix($view, $request->getHeader('USER_AGENT'));
     }
@@ -114,10 +116,10 @@ class Frontend implements SubscriberInterface
      */
     private function addTemplateDir(Enlight_View_Default $view)
     {
-        if($this->bootstrap->isShopwareFive()){
-            $view->addTemplateDir(__DIR__.'/../Views/responsive');
+        if($this->bootstrap->isShopwareFive() && $this->bootstrap->isTemplateResponsive()){
+            $view->addTemplateDir(__DIR__ . '/../Views/responsive');
         } else {
-            $view->addTemplateDir(__DIR__.'/../Views/emotion');
+            $view->addTemplateDir(__DIR__ . '/../Views/emotion');
         }
     }
 
@@ -162,5 +164,16 @@ class Frontend implements SubscriberInterface
         } else {
             $view->assign('swagFacebook_hideFacebook', false);
         }
+    }
+
+    /**
+     * @param Enlight_Controller_Request_Request $request
+     * @param array $article
+     *
+     * @return ArticleImageSourceGenerator
+     */
+    private function getArticleImageSourceGenerator(Enlight_Controller_Request_Request $request, array $article)
+    {
+        return new ArticleImageSourceGenerator($this->bootstrap, $request, $article);
     }
 }
