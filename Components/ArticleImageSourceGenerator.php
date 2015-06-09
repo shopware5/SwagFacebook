@@ -67,16 +67,9 @@ class ArticleImageSourceGenerator
      */
     private function getArticleImageSource()
     {
-        if($this->bootstrap->isShopwareFive()){
-            $imageSource = $this->getImageSourceFromSW5Article($this->article);
-            if(isset($imageSource)){
-                return $imageSource;
-            }
-        } else {
-            $imageSource = $this->getImageSourceFromSW4Article($this->article);
-            if(isset($imageSource)){
-                return $imageSource;
-            }
+        $imageSource = $this->getImageSourceFromArticle();
+        if(isset($imageSource)){
+            return $imageSource;
         }
 
         $imageSource = $this->createArticleSupplierImageSource();
@@ -88,38 +81,26 @@ class ArticleImageSourceGenerator
     }
 
     /**
-     * Get the ArticleImage from SW5 Article
+     * try get the ArticleImage from Article
      *
-     * @param $article
      * @return String|null
      */
-    private function getImageSourceFromSW5Article($article)
+    private function getImageSourceFromArticle()
     {
-        if(isset($article['image']['thumbnails'][0]['source'])){
-            return $article['image']['thumbnails'][0]['source'];
+        if(isset($this->article['image']['thumbnails'][0]['source'])){
+            return $this->article['image']['thumbnails'][0]['source'];
         }
 
-        if(isset($article['image']['source'])){
-            return $article['image']['source'];
+        if(isset($this->article['image']['source'])){
+            return $this->article['image']['source'];
         }
 
-        return null;
-    }
-
-    /**
-     * Get the ArticleImage from SW4 Article
-     *
-     * @param $article
-     * @return String|null
-     */
-    private function getImageSourceFromSW4Article($article)
-    {
-        if(isset($article['image']['src'][3])){
-            return $article['image']['src'][3];
+        if(isset($this->article['image']['src'][3])){
+            return $this->article['image']['src'][3];
         }
 
-        if(isset($article['image']['src']['original'])){
-            return $article['image']['src']['original'];
+        if(isset($this->article['image']['src']['original'])){
+            return $this->article['image']['src']['original'];
         }
 
         return null;
@@ -136,7 +117,8 @@ class ArticleImageSourceGenerator
         if(!$this->article['supplierImg']){
             return null;
         }
-        return $this->request->getScheme() . '://'. Shopware()->Config()->get('sHOST') . '/' . $this->article['supplierImg'];
+        $basePath = Shopware()->Container()->get('Shop')->getBasePath();
+        return $this->request->getScheme() . '://'. Shopware()->Config()->get('sHOST') . $basePath . '/' . $this->article['supplierImg'];
     }
 
     /**
@@ -146,6 +128,26 @@ class ArticleImageSourceGenerator
      */
     private function getDefaultImageSource()
     {
-        return $this->request->getScheme() . '://'. Shopware()->Config()->get('sHOST') . '/frontend/_resources/images/no_picture.jpg';
+        $basePath = Shopware()->Container()->get('Shop')->getBasePath();
+
+        if($this->bootstrap->isShopwareFive() && $this->bootstrap->isTemplateResponsive()){
+            return $this->getSW5ImagePath($basePath);
+        } else if($this->bootstrap->isShopwareFive()){
+            return $this->getSW5ImagePath($basePath);
+        } else {
+            return $this->request->getScheme() . '://'. Shopware()->Config()->get('sHOST') . $basePath .'/templates/_default/frontend/_resources/images/no_picture.jpg';
+        }
+    }
+
+    /**
+     * Create the SW5 "NoImage" Path.
+     * Implemented to prevent duplicate code
+     *
+     * @param $basePath
+     * @return string
+     */
+    private function getSW5ImagePath($basePath)
+    {
+        return $this->request->getScheme() . '://'. Shopware()->Config()->get('sHOST') . $basePath .'/themes/Frontend/Responsive/frontend/_public/src/img/no-picture.jpg';
     }
 }
