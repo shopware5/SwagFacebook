@@ -19,8 +19,8 @@
 
     {$smarty.block.parent}
 
-        {if $swagFacebook_app_id && !$swagFacebook_hideFacebook}
-            {if $swagFacebook_showFacebookTab}
+    {if $swagFacebook_app_id && !$swagFacebook_hideFacebook}
+        {if $swagFacebook_showFacebookTab}
             <div class="tab--container">
                 <div class="tab--header">
                     <h2>{s namespace="frontend/SwagFacebook/blocks_detail" name="facebookTabTitle"}{/s}</h2>
@@ -40,7 +40,7 @@
 
                 </div>
             </div>
-            {/if}
         {/if}
+    {/if}
 
 {/block}

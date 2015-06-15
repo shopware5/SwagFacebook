@@ -11,7 +11,7 @@ class Less implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'Theme_Compiler_Collect_Plugin_Less' =>  'addLessFiles'
+            'Theme_Compiler_Collect_Plugin_Less' => 'addLessFiles'
         );
     }
 

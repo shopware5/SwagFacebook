@@ -6,6 +6,8 @@
  * file that was distributed with this source code.
  */
 
+use Shopware\Models\Config\Element;
+
 class Shopware_Plugins_Frontend_SwagFacebook_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     /**
@@ -17,13 +19,13 @@ class Shopware_Plugins_Frontend_SwagFacebook_Bootstrap extends Shopware_Componen
     public function getInfo()
     {
         return array(
-            'version'   => $this->getVersion(),
-            'label'     => $this->getLabel(),
-            'name'      => 'SwagFacebook',
-            'author'    => 'shopware AG',
+            'version' => $this->getVersion(),
+            'label' => $this->getLabel(),
+            'name' => 'SwagFacebook',
+            'author' => 'shopware AG',
             'copyright' => 'Copyright (c) shopware AG',
-            'license'   => 'The MIT License (MIT) (http://opensource.org/licenses/MIT)',
-            'link'      => 'https://github.com/shopwareLabs/SwagFacebook',
+            'license' => 'The MIT License (MIT) (http://opensource.org/licenses/MIT)',
+            'link' => 'https://github.com/shopwareLabs/SwagFacebook',
         );
     }
 
@@ -99,13 +101,49 @@ class Shopware_Plugins_Frontend_SwagFacebook_Bootstrap extends Shopware_Componen
     private function createForm()
     {
         $form = $this->Form();
-        $form->setElement('text', 'app_id_SwagFacebook', array('label' => 'Facebook App-ID', 'value' => '', 'scope' => Shopware_Components_Form::SCOPE_SHOP));
-        $form->setElement('checkbox', 'showSwagFacebook', array('label' => 'Facebook zeigen', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
-        $form->setElement('checkbox', 'swagFacebook_showShareButton', array('label' => 'Teilen Button zeigen (*)', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
-        $form->setElement('checkbox', 'swagFacebook_showFaces', array('label' => 'Bilder "Gesichter" zeigen (*)', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
-        $form->setElement('checkbox', 'showDetailPageComments', array('label' => 'Facebook-Kommentare auf Detailseite anzeigen', 'value' => 1, 'scope' => Shopware_Components_Form::SCOPE_SHOP));
-        // TODO: Currently it seems like the setting has no effect. Check later if u can change the Facebook color-scheme
-//        $form->setElement('select', 'swagFacebook_colorscheme', array('label' => 'Farbschema (*)', 'store' => array(array(1,'light'), array(2, 'dark')), 'scope' => Shopware_Components_Form::SCOPE_SHOP));
+        $form->setElement(
+            'text',
+            'app_id_SwagFacebook',
+            array('label' => 'Facebook App-ID', 'value' => '', 'scope' => Element::SCOPE_SHOP)
+        );
+        $form->setElement(
+            'checkbox',
+            'showSwagFacebook',
+            array('label' => 'Facebook zeigen', 'value' => 1, 'scope' => Element::SCOPE_SHOP)
+        );
+        $form->setElement(
+            'checkbox',
+            'swagFacebook_showShareButton',
+            array('label' => 'Teilen Button zeigen (*)', 'value' => 1, 'scope' => Element::SCOPE_SHOP)
+        );
+        $form->setElement(
+            'checkbox',
+            'swagFacebook_showFaces',
+            array(
+                'label' => 'Bilder "Gesichter" zeigen (*)',
+                'value' => 1,
+                'scope' => Element::SCOPE_SHOP
+            )
+        );
+        $form->setElement(
+            'checkbox',
+            'showDetailPageComments',
+            array(
+                'label' => 'Facebook-Kommentare auf Detailseite anzeigen',
+                'value' => 1,
+                'scope' => Element::SCOPE_SHOP
+            )
+        );
+//        TODO: Currently it seems like the setting has no effect. Check later if u can change the Facebook color-scheme
+//        $form->setElement(
+//            'select',
+//            'swagFacebook_colorscheme',
+//            array(
+//                'label' => 'Farbschema (*)',
+//                'store' => array(array(1, 'light'), array(2, 'dark')),
+//                'scope' => Shopware_Components_Form::SCOPE_SHOP
+//            )
+//        );
 
         $this->addFormTranslations($this->getTranslations());
     }
@@ -113,7 +151,7 @@ class Shopware_Plugins_Frontend_SwagFacebook_Bootstrap extends Shopware_Componen
     private function getTranslations()
     {
         return array(
-            'en_GB'  => array(
+            'en_GB' => array(
                 'showSwagFacebook' => array('label' => 'Show Facebook'),
                 'app_id_SwagFacebook' => array('label' => 'Facebook App-ID'),
                 'showDetailPageComments' => array('label' => 'Show comments in detail page'),
@@ -145,6 +183,7 @@ class Shopware_Plugins_Frontend_SwagFacebook_Bootstrap extends Shopware_Componen
         if (Shopware()->Shop()->getTemplate()->getVersion() < 3) {
             return false;
         }
+
         return true;
     }
 
