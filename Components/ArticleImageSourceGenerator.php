@@ -32,8 +32,11 @@ class ArticleImageSourceGenerator
      * @param Enlight_Controller_Request_Request $request
      * @param array $article
      */
-    public function __construct(Shopware_Plugins_Frontend_SwagFacebook_Bootstrap $bootstrap, Enlight_Controller_Request_Request $request, array $article)
-    {
+    public function __construct(
+        Shopware_Plugins_Frontend_SwagFacebook_Bootstrap $bootstrap,
+        Enlight_Controller_Request_Request $request,
+        array $article
+    ) {
         $this->bootstrap = $bootstrap;
         $this->request = $request;
         $this->article = $article;
@@ -68,12 +71,12 @@ class ArticleImageSourceGenerator
     private function getArticleImageSource()
     {
         $imageSource = $this->getImageSourceFromArticle();
-        if(isset($imageSource)){
+        if (isset($imageSource)) {
             return $imageSource;
         }
 
         $imageSource = $this->createArticleSupplierImageSource();
-        if(isset($imageSource)){
+        if (isset($imageSource)) {
             return $imageSource;
         }
 
@@ -87,19 +90,19 @@ class ArticleImageSourceGenerator
      */
     private function getImageSourceFromArticle()
     {
-        if(isset($this->article['image']['thumbnails'][0]['source'])){
+        if (isset($this->article['image']['thumbnails'][0]['source'])) {
             return $this->article['image']['thumbnails'][0]['source'];
         }
 
-        if(isset($this->article['image']['source'])){
+        if (isset($this->article['image']['source'])) {
             return $this->article['image']['source'];
         }
 
-        if(isset($this->article['image']['src'][3])){
+        if (isset($this->article['image']['src'][3])) {
             return $this->article['image']['src'][3];
         }
 
-        if(isset($this->article['image']['src']['original'])){
+        if (isset($this->article['image']['src']['original'])) {
             return $this->article['image']['src']['original'];
         }
 
@@ -114,11 +117,12 @@ class ArticleImageSourceGenerator
      */
     private function createArticleSupplierImageSource()
     {
-        if(!$this->article['supplierImg']){
+        if (!$this->article['supplierImg']) {
             return null;
         }
         $basePath = Shopware()->Container()->get('Shop')->getBasePath();
-        return $this->request->getScheme() . '://'. Shopware()->Config()->get('sHOST') . $basePath . '/' . $this->article['supplierImg'];
+
+        return $this->request->getScheme() . '://' . Shopware()->Config()->get('sHOST') . $basePath . '/' . $this->article['supplierImg'];
     }
 
     /**
@@ -130,12 +134,12 @@ class ArticleImageSourceGenerator
     {
         $basePath = Shopware()->Container()->get('Shop')->getBasePath();
 
-        if($this->bootstrap->isShopwareFive() && $this->bootstrap->isTemplateResponsive()){
+        if ($this->bootstrap->isShopwareFive() && $this->bootstrap->isTemplateResponsive()) {
             return $this->getSW5ImagePath($basePath);
-        } else if($this->bootstrap->isShopwareFive()){
+        } elseif ($this->bootstrap->isShopwareFive()) {
             return $this->getSW5ImagePath($basePath);
         } else {
-            return $this->request->getScheme() . '://'. Shopware()->Config()->get('sHOST') . $basePath .'/templates/_default/frontend/_resources/images/no_picture.jpg';
+            return $this->request->getScheme() . '://' . Shopware()->Config()->get('sHOST') . $basePath . '/templates/_default/frontend/_resources/images/no_picture.jpg';
         }
     }
 
@@ -148,6 +152,6 @@ class ArticleImageSourceGenerator
      */
     private function getSW5ImagePath($basePath)
     {
-        return $this->request->getScheme() . '://'. Shopware()->Config()->get('sHOST') . $basePath .'/themes/Frontend/Responsive/frontend/_public/src/img/no-picture.jpg';
+        return $this->request->getScheme() . '://' . Shopware()->Config()->get('sHOST') . $basePath . '/themes/Frontend/Responsive/frontend/_public/src/img/no-picture.jpg';
     }
 }
