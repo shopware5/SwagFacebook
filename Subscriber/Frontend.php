@@ -73,14 +73,17 @@ class Frontend implements SubscriberInterface
      * @param Enlight_Config $config
      * @param Enlight_Controller_Request_Request $request
      */
-    private function assignConfigDataToView(Enlight_View_Default $view, Enlight_Config $config, Enlight_Controller_Request_Request $request)
-    {
+    private function assignConfigDataToView(
+        Enlight_View_Default $view,
+        Enlight_Config $config,
+        Enlight_Controller_Request_Request $request
+    ) {
         $article = $view->getAssign('sArticle');
         $view->assign('swagFacebook_thumbnail', $this->getArticleImageSourceGenerator($request, $article)->getImageSource());
         $view->assign('swagFacebook_unique_id', Shopware()->Shop()->getId() . '_' . $article['articleID']);
         $view->assign('swagFacebook_app_id', $config->get('app_id_SwagFacebook'));
-        $view->assign('swagFacebook_showShareButton', boolval($config->get('swagFacebook_showShareButton')));
-        $view->assign('swagFacebook_showFaces', boolval($config->get('swagFacebook_showFaces')));
+        $view->assign('swagFacebook_showShareButton', $config->get('swagFacebook_showShareButton'));
+        $view->assign('swagFacebook_showFaces', $config->get('swagFacebook_showFaces'));
         $view->assign('swagFacebook_showFacebookTab', $this->tabHandling($config, $request));
         // TODO: if the setting "swagFacebookColorscheme" has a effect in the Facebook application, activate the settings in the Bootstrap for the Customer... See function "createForm()"
         $view->assign('swagFacebook_colorScheme', ($config->get('swagFacebook_colorscheme') || 1));
@@ -101,13 +104,14 @@ class Frontend implements SubscriberInterface
             $showFacebookTab = true;
             $showFacebookTabConfig = $config->get('hideCommentTab');
             if ($showFacebookTabConfig) {
-                $pageUrl = $request->getScheme(). '://' . $request->getHttpHost() . $request->getRequestUri();
+                $pageUrl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getRequestUri();
                 $commentCount = $this->getCommentCount($pageUrl);
                 if ($commentCount == 0) {
                     $showFacebookTab = false;
                 }
             }
         }
+
         return $showFacebookTab;
     }
 
@@ -116,7 +120,7 @@ class Frontend implements SubscriberInterface
      */
     private function addTemplateDir(Enlight_View_Default $view)
     {
-        if($this->bootstrap->isShopwareFive() && $this->bootstrap->isTemplateResponsive()){
+        if ($this->bootstrap->isShopwareFive() && $this->bootstrap->isTemplateResponsive()) {
             $view->addTemplateDir(__DIR__ . '/../Views/responsive');
         } else {
             $view->addTemplateDir(__DIR__ . '/../Views/emotion');
