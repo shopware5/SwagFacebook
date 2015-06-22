@@ -23,7 +23,7 @@
         {if $swagFacebook_showFacebookTab}
             <div class="tab--container">
                 <div class="tab--header">
-                    <h2>{s namespace="frontend/SwagFacebook/blocks_detail" name="facebookTabTitle"}{/s}</h2>
+                    <span>{s namespace="frontend/SwagFacebook/blocks_detail" name="facebookTabTitle"}{/s}</span>
                 </div>
                 <div class="tab--preview">
                     Facebook
