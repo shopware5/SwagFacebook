@@ -8,15 +8,17 @@
     "link": "http://store.shopware.com",
     "author": "Shopware AG",
 
-    "currentVersion": "1.0.2",
+    "currentVersion": "1.0.3",
 
     "changelog": {
         "de": {
+            "1.0.3": "PT-3239 - Bugfix: h2 Tag entfernt;",
             "1.0.2": "PT-3236 - Bugfix: Support von älteren PHP Versionen wieder hergestellt;",
             "1.0.1": "PT-3078, PT-3134 - Bugfix: Diverse Bedienungsverbesserungen und Fehlerbehebungen;",
             "1.0.0": "Erstveröffentlichung;"
         },
         "en": {
+            "1.0.3": "PT-3239 - Bugfix: Deleted h2 tag;",
             "1.0.2": "PT-3236 - Bugfix: Restore support of older PHP versions;",
             "1.0.1": "PT-3078, PT-3134 - Bugfix: Several usability improvements and bug fixes;",
             "1.0.0": "Initial Release;"
