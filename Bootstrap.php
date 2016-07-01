@@ -134,16 +134,15 @@ class Shopware_Plugins_Frontend_SwagFacebook_Bootstrap extends Shopware_Componen
                 'scope' => Element::SCOPE_SHOP
             )
         );
-//        TODO: Currently it seems like the setting has no effect. Check later if u can change the Facebook color-scheme
-//        $form->setElement(
-//            'select',
-//            'swagFacebook_colorscheme',
-//            array(
-//                'label' => 'Farbschema (*)',
-//                'store' => array(array(1, 'light'), array(2, 'dark')),
-//                'scope' => Shopware_Components_Form::SCOPE_SHOP
-//            )
-//        );
+        $form->setElement(
+            'select',
+            'swagFacebook_colorscheme',
+            array(
+                'label' => 'Farbschema (*)',
+                'store' => array(array(1, 'light'), array(2, 'dark')),
+                'scope' => Shopware_Components_Form::SCOPE_SHOP
+            )
+        );
 
         $this->addFormTranslations($this->getTranslations());
     }
@@ -157,8 +156,7 @@ class Shopware_Plugins_Frontend_SwagFacebook_Bootstrap extends Shopware_Componen
                 'showDetailPageComments' => array('label' => 'Show comments in detail page'),
                 'swagFacebook_showShareButton' => array('label' => 'Show share Button (*)'),
                 'swagFacebook_showFaces' => array('label' => 'Show Faces (*)'),
-                // TODO: This is the translation for the Facebook color-scheme settings below.
-//                'swagFacebook_colorscheme' => array('label' => 'color scheme')
+                'swagFacebook_colorscheme' => array('label' => 'color scheme')
             )
         );
     }
