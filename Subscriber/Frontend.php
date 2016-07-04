@@ -85,8 +85,7 @@ class Frontend implements SubscriberInterface
         $view->assign('swagFacebook_showShareButton', $config->get('swagFacebook_showShareButton'));
         $view->assign('swagFacebook_showFaces', $config->get('swagFacebook_showFaces'));
         $view->assign('swagFacebook_showFacebookTab', $this->tabHandling($config, $request));
-        // TODO: if the setting "swagFacebookColorscheme" has a effect in the Facebook application, activate the settings in the Bootstrap for the Customer... See function "createForm()"
-        $view->assign('swagFacebook_colorScheme', ($config->get('swagFacebook_colorscheme') || 1));
+        $view->assign('swagFacebook_colorScheme', $config->get('swagFacebook_colorscheme'));
         $this->IE6Fix($view, $request->getHeader('USER_AGENT'));
     }
 
